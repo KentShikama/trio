@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Trio Questions</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background-color: #f5f5f5;
+            color: #333;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            text-align: center;
+        }
+
+        .question {
+            font-size: 2.5rem;
+            line-height: 1.5;
+            margin-bottom: 3rem;
+            padding: 0 20px;
+            font-weight: 300;
+            letter-spacing: -0.5px;
+        }
+
+        .next-button {
+            background-color: #1a1a1a;
+            color: white;
+            border: none;
+            padding: 16px 48px;
+            font-size: 1.2rem;
+            font-weight: 500;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .next-button:hover {
+            background-color: #333;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .next-button:active {
+            transform: translateY(0);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .question {
+                font-size: 1.8rem;
+            }
+            
+            .next-button {
+                font-size: 1rem;
+                padding: 14px 36px;
+            }
+        }
+
+        /* Fade in animation */
+        .fade-in {
+            animation: fadeIn 0.5s ease-in;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div id="question" class="question fade-in"></div>
+        <button id="nextButton" class="next-button">Next</button>
+    </div>
+
+    <script>
+        const trioQuestions = [
+            "Of the three Sacred Treasures of Japan—the mirror, the sword, and the jewel—which do you feel symbolizes leadership most powerfully?",
+            "Of Japan's Three Scenic Views—Matsushima, Amanohashidate, and Itsukushima—which vista would you paint on a folding screen?",
+            "Of Japan's three largest cities—Tokyo, Osaka, and Nagoya—which matches your personal rhythm best?",
+            "Of the three classic ramen broths—shoyu, shio, and miso—which comforts you deepest on a cold night?",
+            "Of the big three convenience-store chains—7-Eleven, Lawson, and FamilyMart—which feels most like home at 2 a.m.?",
+            "Of the three main islands—Honshu, Hokkaido, and Kyushu—which would you choose for a year-long sabbatical?",
+            "Of the Three Great Wagyu regions—Kobe, Matsusaka, and Omi—which marbling whispers luxury to you?",
+            "Of the trio of Studio Ghibli icons—Totoro, No-Face, and Calcifer—which companion would you invite into your apartment?",
+            "Of the three Japanese writing systems—hiragana, katakana, and kanji—which do you find most aesthetically pleasing?",
+            "Of the three best-loved tea types—sencha, matcha, and hojicha—which steadies your mind when deadlines loom?",
+            "Of the three powerhouses of Japanese gaming—Nintendo, Sony, and Sega—which shaped your childhood memories most?",
+            "Of the three Pokémon Kanto starters—Bulbasaur, Charmander, and Squirtle—which would you trust on a hike up Fuji?",
+            "Of the three traditional performing arts—Noh, Kabuki, and Bunraku—which stirs you with its silence and movement?",
+            "Of the three major mobile carriers—NTT Docomo, au by KDDI, and SoftBank—which feels least labyrinthine to navigate?",
+            "Of the three main Shinkansen lines—Tokaido, Tohoku, and Kyushu—which route excites your wanderlust?",
+            "Of the three citrus stars—yuzu, sudachi, and kabosu—which scent lifts your spirits instantly?",
+            "Of the martial-arts trio—judo, kendo, and karate—which philosophy speaks loudest beyond the dojo?",
+            "Of the three quintessential mochi treats—daifuku, kusa mochi, and warabi mochi—which texture do your memories crave?",
+            "Of the trio of zen rock-garden virtues—simplicity, asymmetry, and naturalness—which guides your workspace décor?",
+            "Of the three main Buddhist schools—Zen, Pure Land, and Nichiren—which perspective intrigues you most over tea?",
+            "Of the trio of coming-of-age celebrations—Shichi-Go-San, Seijin Shiki, and Kanreki—which rite fascinates you culturally?",
+            "Of the three legendary emaki scrolls—Genji Monogatari, Choju-giga, and Heiji Monogatari—which would you rescue from a museum fire?",
+            "Of the three famous castles—Himeji, Matsumoto, and Kumamoto—which stonework feels almost alive?",
+            "Of the three pillars of wabi-sabi—impermanence, imperfection, and incompleteness—which whispers truth to you today?",
+            "Of the three phases of cherry-blossom season—kaika, mankai, and sakura-fubuki—which moment steals your breath?",
+            "Of the three coin offerings often tossed at shrines—5 yen, 50 yen, and 100 yen—which feels most lucky in your palm?",
+            "Of the trio of okonomiyaki staples—cabbage, pork belly, and bonito flakes—which makes you flip for seconds?",
+            "Of the three tourist rail passes—JR Pass, Tokyo Subway Ticket, and Kansai Thru Pass—which path would your inner explorer stamp first?",
+            "Of Japan's three storied baseball clubs—Yomiuri Giants, Hanshin Tigers, and SoftBank Hawks—which colors would you paint on your face?",
+            "Of the trio of grand summer festivals—Gion Matsuri, Tenjin Matsuri, and Nebuta Matsuri—which night parade sparks your joy?",
+            "Of the three big manga magazines—Shonen Jump, Shonen Magazine, and Shonen Sunday—which weekly cliffhangers ruin your productivity most?",
+            "Of the three classic haiku lines—first, pivot, or closing—which carries the season's fragrance for you?",
+            "Of the Three Great Gardens—Kenroku-en, Kairaku-en, and Koraku-en—which strolling path would you daydream in all afternoon?",
+            "Of the three iconic Japanese car brands—Toyota, Honda, and Nissan—which design language feels most futuristic?",
+            "Of the trio of Sony PlayStation legends—PS1, PS2, and PS5—which startup chime still gives you goosebumps?",
+            "Of the three schools of ikebana—Ikenobo, Ohara, and Sogetsu—which arrangement style matches your living room?",
+            "Of the three everyday honorifics—-san, -kun, and -sama—which nuance trips you up in conversation?",
+            "Of a kaiseki meal's first three courses—sakizuke, mukozuke, and hassun—which plate would you photograph before eating?",
+            "Of Momotaro's animal allies—dog, monkey, and pheasant—which companion would you count on in battle?",
+            "Of the three Edo-period capitals of taste—sushi, soba, and tempura—which dish evokes Edo's hustle for you?",
+            "Of the three islands in Tokyo's Izu chain—Oshima, Niijima, and Hachijojima—which volcanic shore calls your name?",
+            "Of the three busiest JR lines—Yamanote, Chuo, and Keihin-Tohoku—which daily loop feels oddly comforting?",
+            "Of the three calligraphy tools—brush, ink stick, and washi paper—which element feels most alive in your hand?",
+            "Of the bushido virtues trio—courage, benevolence, and sincerity—which guides your decisions lately?",
+            "Of the three playful onomatopoeia—doki-doki, waku-waku, and giri-giri—which echoes your mood this morning?",
+            "Of the staple miso-soup trio—miso paste, dashi, and tofu—which ingredient could you not live without?",
+            "Of the J-pop girl-group giants—AKB48, Nogizaka46, and Perfume—which playlist dominates your karaoke queue?",
+            "Of the three dry-landscape garden elements—gravel, rocks, and moss—which frames tranquility best in your mind?",
+            "Of the trio of KitKat Japan flavors—matcha, sake, and wasabi—which novelty would you mail to an adventurous friend?",
+            "Of the three sacred mountains of Japan—Fuji, Tate, and Haku—which peak do you dream of greeting at sunrise?",
+            "Of the three colors on Japanese traffic lights—red, yellow, and blue-green—which hue best describes your workflow pace?",
+            "Of the prefectures starting with "O"—Osaka, Okinawa, and Oita—which itinerary excites your palate first?",
+            "Of Tokyo's fashion hubs—Harajuku, Shibuya, and Ginza—which boulevard feels like your runway?",
+            "Of the three staples on a school lunch tray—rice, miso soup, and milk—which disappeared first when you were a kid?",
+            "Of the trio of onsen resorts—Hakone, Beppu, and Kusatsu—which hot-spring steam seems to carry away your worries?",
+            "Of takoyaki's topping threesome—mayo, bonito flakes, and aonori—which swirl completes the perfect bite?",
+            "Of the three Japanese punctuation marks—。 、 and ・—which shape feels oddly satisfying to write?",
+            "Of the seasonal gift-giving events—Oshogatsu, Ochugen, and Oseibo—which tradition warms your heart most?",
+            "Of yakiniku's classic cuts—kalbi, harami, and gyutan—which sizzle smells like happiness?",
+            "Of the three kami siblings—Amaterasu, Susanoo, and Tsukuyomi—which deity would you invite to a moon-viewing party?",
+            "Of the levels of polite speech—plain, polite, and keigo—which do you overthink when texting your boss?",
+            "Of the culinary influences—washoku, yoshoku, and chuka—which fusion sparks your recipe experiments lately?",
+            "Of Hinamatsuri mochi colors—pink, white, and green—which hue whispers spring to you?",
+            "Of the salary-man desk essentials—hanko, meishi, and schedule book—which item defines adulthood in Tokyo?",
+            "Of the Dewa Sanzan peaks—Haguro, Gassan, and Yudono—which pilgrimage would you attempt barefoot?",
+            "Of recent NHK morning dramas—Oshin, Amachan, and Massan—which inspirational lead sticks with you?",
+            "Of sake classifications—junmai, ginjo, and daiginjo—which aroma would you swirl on a winter evening?",
+            "Of the vending-machine drink trio—hot canned coffee, Pocari Sweat, and matcha latte—which button would you press at dawn?",
+            "Of the parts of a Japanese address—prefecture, city ward, and chōme—which element still puzzles you?",
+            "Of Miyazaki film themes—environmentalism, pacifism, and coming-of-age—which thread do you replay in your mind?",
+            "Of Japanese comedy styles—manzai, rakugo, and conte—which gets the loudest laugh from you?",
+            "Of the cashless payment options—Suica, Pasmo, and PayPay—which app feels most seamless at checkout?",
+            "Of Abe's Three Arrows—monetary easing, fiscal stimulus, and structural reform—which arrow do you think flew farthest?",
+            "Of the Okinawa island trio—Okinawa-hontō, Ishigaki, and Miyako—which coral reef beckons you?",
+            "Of shōnen-hero motivations—friendship, effort, and victory—which value powers your daily grind?",
+            "Of persimmon varieties—Fuyu, Jiro, and Hachiya—which sweetness feels like autumn nostalgia?",
+            "Of the courtesy phrases—itadakimasu, gochisousama, and otsukaresama—which do you savor saying?",
+            "Of the tatami-room essentials—tatami mats, shoji screens, and tokonoma—which feature calms you the instant you walk in?",
+            "Of today's baseball prodigies—Shohei Ohtani, Roki Sasaki, and Munetaka Murakami—which swing (or pitch) makes you gasp?",
+            "Of the mythical creatures—Kirin, Tengu, and Kappa—which folklore monster would you chat with over ramen?",
+            "Of Japan's Olympic host cities—Tokyo, Sapporo, and Nagano—which legacy inspires you more?",
+            "Of convenience-store fried-chicken options—Famichiki, Karaage-kun, and Nanachiki—which crunch rules snack time?",
+            "Of Kyoto's most-visited sites—Kiyomizudera, Kinkaku-ji, and Fushimi Inari—which spiritual path would you wander at dusk?",
+            "Of the components of a summer fireworks show—single giant shell, Niagara falls, and rapid-fire star mine—which burst makes your heart skip?",
+            "Of ramen's finishing trio—negi, nori, and chashu—which topping do you defend in debates?",
+            "Of Japanese streaming platforms—Netflix Japan, Abema, and U-Next—which queue keeps you away from your to-do list?",
+            "Of shodō tools—ink stone, brush rest, and paper weight—which accessory feels underrated?",
+            "Of exclusive KitKat flavors—sakura mochi, sake, and sweet potato—which limited edition would you hoard?",
+            "Of the Three Arrows of Oda Nobunaga—matchlock guns, alliances, and ruthless strategy—which tactic fascinates you historically?",
+            "Of the three kinds of Japanese whisky—single malt, blended, and grain—which dram would you raise during hanami?",
+            "Of the elements of ma in design—empty space, timing pause, and subtle detail—which aspect guides your slide deck?",
+            "Of popular LINE-sticker moods—happy Brown, angry Cony, and sarcastic Sally—which sticker represents you on Monday mornings?",
+            "Of the big three snow festivals—Sapporo Snow, Asahikawa Winter, and Otaru Snow Light Path—which ice spectacle melts your heart?",
+            "Of the trio of Kanji-proficiency levels—N3, N2, and N1—which milestone feels most daunting?",
+            "Of the staple noodle dishes—soba, udon, and somen—which slurp brings childhood flooding back?",
+            "Of karaoke encore choices—'Linda Linda,' 'Heavy Rotation,' and 'Lemon'—which anthem do you unleash last?",
+            "Of the three dream seats on a Shinkansen—window, aisle, or last-row window with plug—which ride strategy is yours?",
+            "Of the three New-Year customs—hatsumode, osechi, and otoshidama—which tradition lights up your January 1?",
+            "Of the three flavors of dango in a mitarashi set—sweet soy, sesame, and red bean—which skewer vanishes first?",
+            "Of the three historic ukiyo-e themes—Edo daily life, kabuki actors, and scenic landscapes—which series would you hang in your hallway?"
+        ];
+
+        let usedQuestions = [];
+
+        function getRandomQuestion() {
+            // If all questions have been used, reset the array
+            if (usedQuestions.length === trioQuestions.length) {
+                usedQuestions = [];
+            }
+
+            // Get questions that haven't been used yet
+            const availableQuestions = trioQuestions.filter((q, index) => !usedQuestions.includes(index));
+            
+            // Select a random question from available ones
+            const randomIndex = Math.floor(Math.random() * availableQuestions.length);
+            const selectedQuestion = availableQuestions[randomIndex];
+            
+            // Find the original index and mark it as used
+            const originalIndex = trioQuestions.indexOf(selectedQuestion);
+            usedQuestions.push(originalIndex);
+            
+            return selectedQuestion;
+        }
+
+        function displayQuestion() {
+            const questionElement = document.getElementById('question');
+            questionElement.classList.remove('fade-in');
+            
+            // Trigger reflow to restart animation
+            void questionElement.offsetWidth;
+            
+            questionElement.textContent = getRandomQuestion();
+            questionElement.classList.add('fade-in');
+        }
+
+        // Initialize with first question
+        displayQuestion();
+
+        // Add event listener to Next button
+        document.getElementById('nextButton').addEventListener('click', displayQuestion);
+    </script>
+</body>
+</html>
